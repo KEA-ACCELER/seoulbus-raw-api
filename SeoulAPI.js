@@ -1,7 +1,5 @@
 var request = require('request');
 var mysql = require('mysql2');
-var Iconv = require('iconv').Iconv;
-var iconv = new Iconv('EUC-KR', 'UTF-8');
 
 var connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
@@ -25,15 +23,15 @@ request({
     //console.log('Headers', JSON.stringify(response.headers));
     //console.log('Response received', body);
     body = JSON.parse(body);
-    console.log(body.CardBusTimeNew.row);
+    //console.log(body.CardBusTimeNew.row);
     body.CardBusTimeNew.row.forEach(element => {
         connection.query('INSERT INTO seoulRide SET ?', element, function (error, results, fields) {
             if (error) throw error;
             console.log('The solution is: ', results);
-            connection.query('SELECT * FROM seoulRide', function (error, results, fields) {
-                if (error) throw error;
-                console.log('This is SELECT QUERY!! : ', results);
-            });
+            // connection.query('SELECT * FROM seoulRide', function (error, results, fields) {
+            //     if (error) throw error;
+            //     console.log('This is SELECT QUERY!! : ', results);
+            // });
         }
         );
     });
