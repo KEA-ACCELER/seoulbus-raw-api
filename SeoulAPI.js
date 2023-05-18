@@ -12,6 +12,11 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
+/**
+ * Get Bus Ride, Alight Info
+ * 
+ */
+
 var url = 'http://openapi.seoul.go.kr:8088/65595a50536368723130314658624a4f/json/CardBusTimeNew/1/5/201511';
 
 request({
@@ -19,25 +24,37 @@ request({
     method: 'GET',
 
 }, function (error, response, body) {
-    //console.log('Status', response.statusCode);
-    //console.log('Headers', JSON.stringify(response.headers));
-    //console.log('Response received', body);
+
     body = JSON.parse(body);
-    //console.log(body.CardBusTimeNew.row);
     body.CardBusTimeNew.row.forEach(element => {
         connection.query('INSERT INTO seoulRide SET ?', element, function (error, results, fields) {
             if (error) throw error;
             console.log('The solution is: ', results);
-            // connection.query('SELECT * FROM seoulRide', function (error, results, fields) {
-            //     if (error) throw error;
-            //     console.log('This is SELECT QUERY!! : ', results);
-            // });
         }
         );
     });
 
-
-
-
 });
 
+/*
+ *   Get Bus Station Location Info 
+ * 
+ */
+ 
+var url2 = 'http://openapi.seoul.go.kr:8088/65595a50536368723130314658624a4f/json/busStopLocationXyInfo/1/5/';
+
+request({
+	url: url2,
+	method: 'GET'
+}, function (error, response, body) {
+	//console.log('Status', response.statusCode);
+	//console.log('Headers', JSON.stringify(response.headers));
+	console.log('Response received', body);
+    body = JSON.parse(body);
+    body.busStopLocationXyInfo.row.forEach(element => {
+        connection.query('INSERT INTO busStation SET ?', element, function (error, results, fields) {
+            if (error) throw error;
+            console.log('The solution is: ', results);
+        });
+    });
+});

@@ -60,4 +60,12 @@ create table seoulRide(
     MNTN_TYP_CD VARCHAR(20), 
     MNTN_TYP_NM VARCHAR(20), 
     WORK_DT VARCHAR(20)
-)
+);
+
+create table busStation(
+    _pk BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    STOP_NO VARCHAR(20),
+    STOP_NM VARCHAR(60), 
+    XCODE VARCHAR(20),
+    YCODE VARCHAR(20)
+);
