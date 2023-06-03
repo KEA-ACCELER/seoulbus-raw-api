@@ -1,1 +1,30 @@
-
+version: '3'
+services:
+  node:
+    build: ./
+    ports:
+      - 3000:3000
+    environment:
+      - MYSQL_DATABASE=seoulDB
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_HOST=db
+      - API_KEY=${API_KEY}
+    depends_on:
+      db : 
+        condition: service_healthy
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_DATABASE=seoulDB
+      - MYSQL_ROOT_PASSWORD=1234
+    volumes:
+      - ./init.db:/docker-entrypoint-initdb.d
+    command :
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 2s
+      retries: 10
