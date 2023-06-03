@@ -130,4 +130,6 @@ dist
 .pnp.*
 
 # dotenv environment variable file
-docker-compose.yml
+
+.env
+
